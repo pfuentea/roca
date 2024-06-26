@@ -85,10 +85,18 @@ def panel_usuario(request):
 def usuario_producto(request):
     diametros=Diametro.objects.all()
     rollers = Roller.objects.values_list('nombre', flat=True).distinct()  # Obtén nombres únicos de rollers
+    motores= Motor.objects.all()
+    cenefas=Cenefa.objects.all()
+    gateways=Gateway.objects.all()
+    controles=Control.objects.all()
 
     context={
         "diametros":diametros,
-        'rollers': rollers
+        'rollers': rollers,
+        'motores': motores,
+        'cenefas': cenefas,
+        'gateways': gateways,
+        'controles': controles,
     }
     return render(request, 'usuario_producto.html', context)
 

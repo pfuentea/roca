@@ -5,6 +5,10 @@
     <title>Cotización</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -40,7 +44,7 @@
                     <select class="w-full p-2 border border-gray-300 rounded">
                         <option>Seleccionar</option>
                         {% for diametro in diametros %}
-                        <option value="{{ diametro.id }}">{{ diametro.descripcion }}</option>
+                        <option value="{{ diametro.id }}" >{{ diametro.descripcion }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -56,43 +60,55 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Motor eléct</label>
-                    <select class="w-full p-2 border border-gray-300 rounded">
-                        <option>Seleccionar</option>
+                    <select class="w-full p-2 border border-gray-300 rounded" id="motores">
+                        <option value="">No</option>
+                        {% for motor in motores %}
+                        <option value="{{ motor.id }}" value2="{{ motor.precio }}">{{ motor.nombre }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">C. Remoto</label>
-                    <select class="w-full p-2 border border-gray-300 rounded">
-                        <option>Seleccionar</option>
+                    <select class="w-full p-2 border border-gray-300 rounded"  id="controles">
+                        <option value="">No</option>
+                        {% for control in controles %}
+                        <option value="{{ control.id }}" value2="{{ control.precio }}">{{ control.nombre }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Gateway</label>
-                    <select class="w-full p-2 border border-gray-300 rounded">
-                        <option>Seleccionar</option>
+                    <select class="w-full p-2 border border-gray-300 rounded"  id="gateways">
+                        <option value="">No</option>
+                        {% for gatewa in gateways %}
+                        <option value="{{ gatewa.id }}" value2="{{ gatewa.precio }}">{{ gatewa.nombre }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Cenefa</label>
-                    <select class="w-full p-2 border border-gray-300 rounded">
-                        <option>Seleccionar</option>
+                    <select class="w-full p-2 border border-gray-300 rounded"  id="cenefas">
+                        <option value="" value2="0">No</option>
+                        {% for cenefa in cenefas %}
+                        <option value="{{ cenefa.id }}" value2="{{ cenefa.precio }}">{{ cenefa.nombre }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Inst. Roller</label>
-                    <input type="text" class="w-full p-2 border border-gray-300 rounded" value="(auto)" readonly>
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" value="(auto)" readonly id="inst_roller">
                 </div>
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Inst. Cenefa</label>
-                    <input type="text" class="w-full p-2 border border-gray-300 rounded" value="(auto)" readonly>
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" value="(auto)" readonly id="inst_cenefa">
                 </div>
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Inst. Motor</label>
-                    <input type="text" class="w-full p-2 border border-gray-300 rounded" value="(auto)" readonly>
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" value="(auto)" readonly id="inst_motor">
                 </div>
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Cantidad</label>
-                    <input type="text" p-2 border border-gray-300 rounded">
+                    <input type="text" class="p-2 border border-gray-300 rounded" required value="1" id="cantidad">
                 </div>
                 <div class="flex justify-between">
                     <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Cancelar</button>
@@ -104,5 +120,45 @@
             <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Emitir</button>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#inst_roller').val($('#cantidad').val()*7.72);
+            $('#inst_cenefa').val(0);
+
+            $('#motores').change(function() {
+                if( $('#motores').val() != ""){
+                    var valor = 22.45;
+                    $('#inst_motor').val(valor);
+                    console.log(valor)
+                }
+                else{
+                    $('#inst_motor').val(0);
+                }
+            });
+
+            $('#cenefas').change(function() {
+                
+                    var valor = $(this).find('option:selected').attr('value2');
+                    var cantidad = $('#cantidad').val();
+                    $('#inst_cenefa').val(valor*cantidad);
+                    console.log(valor)
+                
+            });
+
+            $('#cantidad').change(function() {
+                var nuevoValor = $(this).val();
+                // Ejemplo de actualización del input inst_roller
+                $('#inst_roller').val(nuevoValor*7.72);
+                var cenefa = $('#cenefas').find('option:selected').attr('value2');
+                
+                $('#inst_cenefa').val(cenefa*nuevoValor);
+            });
+            
+
+
+
+
+        });
+    </script>
 </body>
 </html>
