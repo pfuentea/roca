@@ -1,0 +1,108 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotización</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        .hover-animation:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-[#D7B391] flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-xs">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-[#4a4a4a]">Cotización N</h1>
+            <p class="text-xl font-semibold text-[#4a4a4a]">EE-00001</p>
+        </div>
+        <div class="text-center mb-6">
+            <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Añadir Producto</button>
+        </div>
+        <div class="bg-[#D7B391] p-6 rounded-lg shadow-md">
+            <form>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">Item</label>
+                    <select class="w-full p-2 border border-gray-300 rounded">
+                        <option>Seleccionar</option>
+                        {% for roller in rollers %}
+                        <option>{{ roller }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">Q (diámetro)</label>
+                    <select class="w-full p-2 border border-gray-300 rounded">
+                        <option>Seleccionar</option>
+                        {% for diametro in diametros %}
+                        <option value="{{ diametro.id }}">{{ diametro.descripcion }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-4 flex space-x-2">
+                    <div class="w-1/2">
+                        <label class="block text-[#4a4a4a] mb-2">Alto cm</label>
+                        <input type="text" class="w-full p-2 border border-gray-300 rounded">
+                    </div>
+                    <div class="w-1/2">
+                        <label class="block text-[#4a4a4a] mb-2">Ancho cm</label>
+                        <input type="text" class="w-full p-2 border border-gray-300 rounded">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">Motor eléct</label>
+                    <select class="w-full p-2 border border-gray-300 rounded">
+                        <option>Seleccionar</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">C. Remoto</label>
+                    <select class="w-full p-2 border border-gray-300 rounded">
+                        <option>Seleccionar</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">Gateway</label>
+                    <select class="w-full p-2 border border-gray-300 rounded">
+                        <option>Seleccionar</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">Cenefa</label>
+                    <select class="w-full p-2 border border-gray-300 rounded">
+                        <option>Seleccionar</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">Inst. Roller</label>
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" value="(auto)" readonly>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">Inst. Cenefa</label>
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" value="(auto)" readonly>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">Inst. Motor</label>
+                    <input type="text" class="w-full p-2 border border-gray-300 rounded" value="(auto)" readonly>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">Cantidad</label>
+                    <input type="text" p-2 border border-gray-300 rounded">
+                </div>
+                <div class="flex justify-between">
+                    <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Cancelar</button>
+                    <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Guardar y agregar producto</button>
+                </div>
+            </form>
+        </div>
+        <div class="text-center mt-6">
+            <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Emitir</button>
+        </div>
+    </div>
+</body>
+</html>

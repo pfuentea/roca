@@ -1,0 +1,47 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrador</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #D7B391;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="text-center">
+        <h1 class="text-3xl font-semibold text-gray-700 mb-6">Panel Administrador</h1>
+        <div class="flex justify-center space-x-4 mb-8">
+            
+                <button class="bg-gray-700 text-white py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-600">+ Producto</button>
+            
+            <a href="/panel_admin">
+                <button class="bg-gray-700 text-white py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-600">+ Usuario</button>    
+            </a>
+            <a href="/admin_cotizaciones">
+                <button class="bg-gray-700 text-white py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-600">Cotizaciones</button>
+            </a>
+        </div>
+        <div class="bg-[#D7B391] p-8 rounded-lg shadow-lg" style="border: 1px solid #6b6b6b;">
+            <form>
+                <div class="mb-4">
+                    <label for="usuario" class="block text-gray-700 mb-2">Usuario</label>
+                    <input type="text" id="usuario" class="w-full px-3 py-2 border rounded" placeholder="Usuario">
+                </div>
+                <div class="mb-4">
+                    <label for="nombre" class="block text-gray-700 mb-2">Nombre</label>
+                    <input type="text" id="nombre" class="w-full px-3 py-2 border rounded" placeholder="Nombre">
+                </div>
+                <div class="mb-4">
+                    <label for="contrasena" class="block text-gray-700 mb-2">Contraseña</label>
+                    <input type="password" id="contrasena" class="w-full px-3 py-2 border rounded" placeholder="Contraseña">
+                </div>
+                <button type="submit" class="bg-gray-700 text-white py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gray-600">Crear usuario</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

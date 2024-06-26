@@ -1,0 +1,50 @@
+{% extends "../base_admin.html" %}
+
+{% block titulo %}Simulador de precios {% endblock %}
+
+{% block content %}
+
+
+<div class="container mt-5">
+    <h2 class="text-center">Nuevo usuario</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <label for="{{ form.username.id_for_label }}" class="col-md-6 col-form-label text-md-end">Usuario :</label>
+                    <div class="col-md-6">
+                        {{ form.username }}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="{{ form.first_name.id_for_label }}" class="col-md-6 col-form-label text-md-end">Nombre :</label>
+                    <div class="col-md-6">
+                        {{ form.first_name }}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="{{ form.password.id_for_label }}" class="col-md-6 col-form-label text-md-end">Contraseña :</label>
+                    <div class="col-md-6">
+                        {{ form.password }}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="{{ form.confirm_password.id_for_label }}" class="col-md-6 col-form-label text-md-end">Confirmar contraseña :</label>
+                    <div class="col-md-6">
+                        {{ form.confirm_password }}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6 offset-md-6">
+                        <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<label for="{{ form.username.id_for_label }}" class="col-md-6 col-form-label text-md-end">Usuario</label>
+<div class="col-md-6">
+
+{% endblock %}
