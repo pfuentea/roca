@@ -7,6 +7,7 @@ class ResumenCotizacion(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     usuario_generador = models.ForeignKey(User, on_delete=models.CASCADE)
+    cotizacion_id=models.CharField(max_length=50,default='')
 
     def __str__(self):
         return f"Resumen de Cotización para {self.cliente.nombre} - {self.fecha}"

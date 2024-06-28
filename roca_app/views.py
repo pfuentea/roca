@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from .forms.user_creation import UserCreationForm
@@ -10,6 +10,9 @@ from django.contrib import messages
 # Create your views here.
 
 from .models import *
+from .forms.clienteForm import ClienteForm
+from .forms.resumenCotizacionForm import ResumenCotizacionForm
+from .forms.cotizacionForm import DetalleCotizacionForm
 
 def index(request):
 
@@ -80,9 +83,49 @@ def register(request):
 
 def panel_usuario(request):
     context={}
-    return render(request, 'usuario_cotizacion.html', context)
+    if request.method == "POST":
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            cliente = form.save()
+            resumen = ResumenCotizacion.objects.create(
+                cliente=cliente,
+                usuario_generador=request.user,
+                total=0,
+            )
+            return redirect('usuario_producto',  cliente_id=cliente.id, resumen_id=resumen.id)
+        else:
+            return render(request, 'usuario_cotizacion.html', context)
+    else:
+        
+        return render(request, 'usuario_cotizacion.html', context)
 
-def usuario_producto(request):
+def usuario_producto(request, cliente_id,resumen_id):
+    resumen = get_object_or_404(ResumenCotizacion, id=resumen_id)
+    cliente = get_object_or_404(Cliente, id=cliente_id)
+    if request.method == 'POST':
+        print(request.POST)
+        roller_name = request.POST.get('roller_name').strip()
+        diametro_id = request.POST.get('diametro_id')
+        print(f"roller:{roller_name}-{diametro_id}")
+        roller = get_object_or_404(Roller, nombre=roller_name, diametro_id=diametro_id)
+        form = DetalleCotizacionForm(request.POST)
+        if form.is_valid():
+            detalle_cotizacion = form.save(commit=False)
+            detalle_cotizacion.roller_id=roller.id
+            detalle_cotizacion.resumen_cotizacion_id = resumen.id
+            detalle_cotizacion.cliente_id = cliente.id
+            detalle_cotizacion.motor_id = request.POST.get('motor_id')
+            detalle_cotizacion.cenefa_id = request.POST.get('cenefa_id')
+            detalle_cotizacion.control_id = request.POST.get('control_id')
+            detalle_cotizacion.diametro_id = diametro_id
+            detalle_cotizacion.gateway_id = request.POST.get('gateway_id')
+            detalle_cotizacion.save()
+        else:
+            for field, errors in form.errors.items():
+                print(f"Error en el campo {field}: {errors}")
+        
+    
+    
     diametros=Diametro.objects.all()
     rollers = Roller.objects.values_list('nombre', flat=True).distinct()  # Obtén nombres únicos de rollers
     motores= Motor.objects.all()
@@ -97,20 +140,95 @@ def usuario_producto(request):
         'cenefas': cenefas,
         'gateways': gateways,
         'controles': controles,
+        'cliente':cliente,
+        'resumen':resumen,
     }
     return render(request, 'usuario_producto.html', context)
 
-def cotizacion_export(request):
-    context={}
+def roller_price(roller,ancho,alto):
+    print(f"roller:{roller.id}-A:{ancho}-T:{alto}")
+    precio = Precio.objects.get(
+            roller_id=roller.id,
+            ancho_inicial__lte=ancho,
+            ancho_final__gte=ancho,
+            alto_inicial__lte=alto,
+            alto_final__gte=alto
+        )
+    resultado=precio.precio
+    return resultado
+
+def cotizacion_export(request,resumen_id):
+    #tenemos que calcular el total
+    resumen = get_object_or_404(ResumenCotizacion, id=resumen_id)    
+    detalles = DetalleCotizacion.objects.filter(resumen_cotizacion=resumen)
+    total_item=0
+    total_resumen=0
+    for item in detalles:
+        
+        cantidad=item.cantidad
+        print(f"cantidad:{cantidad}")
+        precio_motor=0
+        if(item.motor_id is not None):
+            precio_motor = Motor.objects.get(id=item.motor_id).precio
+        print(f"motor:{precio_motor}")
+        precio_cenefa=0
+        if(item.cenefa_id is not None):
+            precio_cenefa = Cenefa.objects.get(id=item.cenefa_id).precio
+        print(f"cen:{precio_cenefa}")
+        precio_control=0
+        if(item.control_id is not None):
+            precio_control = Control.objects.get(id=item.control_id).precio
+        print(f"cont:{precio_control}")
+        precio_gateway=0
+        if(item.gateway_id is not None):
+            precio_gateway = Gateway.objects.get(id=item.gateway_id).precio
+        print(f"gat:{precio_gateway}")
+
+        precio_roller=roller_price(item.roller,item.ancho,item.alto)
+        print(f"roller:{precio_roller}")
+
+        
+        precio_instalacion=item.costo_instalacion_motor+item.costo_instalacion_cenefa+item.costo_instalacion_roller
+        print(f"i-roller:{item.costo_instalacion_roller}")
+        print(f"i-cen:{item.costo_instalacion_cenefa}")
+        print(f"i-mot:{item.costo_instalacion_motor}")
+        print(f"INST:{precio_instalacion}")
+        total_item=(precio_motor*cantidad)+(precio_cenefa*cantidad)+(precio_control*cantidad)+(precio_gateway*cantidad)+precio_instalacion+(precio_roller*cantidad)
+    
+        print(f"total:{total_item}")
+        item.total=total_item
+        item.save()
+        total_resumen+=total_item
+
+    resumen.total=total_resumen
+    cotizacion_id=str(resumen.id).zfill(4)
+    resumen.cotizacion_id=cotizacion_id
+    resumen.save()
+    resumen_total_igv=round(float(total_resumen)*1.18,2)
+
+
+    context={
+        'resumen':resumen,
+        'detalles':detalles,
+        'resumen_total_igv':resumen_total_igv,
+        'cotizacion_id':cotizacion_id,
+    }
+    
     return render(request, 'cotizacion_export.html', context)
     
 
 def panel_admin(request):
-    context={}
+    
+    context={
+        
+    }
     return render(request, 'panel_admin.html', context)
 
 def admin_cotizaciones(request):
-    context={}
+    cotizaciones=ResumenCotizacion.objects.all()
+    context={
+        'cotizaciones':cotizaciones,
+    }
     return render(request, 'admin_cotizaciones.html', context)
 
 def panel_admin(request):

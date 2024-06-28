@@ -14,8 +14,10 @@
         <h1 class="text-3xl font-bold text-[#6b5b3d] mb-6">Panel Administrador</h1>
         <div class="flex justify-center space-x-4 mb-8">
             <button class="bg-[#6b5b3d] text-white py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-[#5a4a32]">+ Producto</button>
-            <button class="bg-[#6b5b3d] text-white py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-[#5a4a32]">+ Usuario</button>
-            <button class="bg-[#6b5b3d] text-white py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-[#5a4a32]">Cotizaciones</button>
+            <a href="/panel_admin">
+<button class="bg-[#6b5b3d] text-white py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-[#5a4a32]">+ Usuario</button>
+</a>
+<button class="bg-[#6b5b3d] text-white py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 hover:bg-[#5a4a32]">Cotizaciones</button>
         </div>
         <div class="bg-[#D7B391] border border-[#6b5b3d] rounded-lg p-4 shadow-lg">
             <table class="w-full text-left">
@@ -29,13 +31,15 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for cot in cotizaciones %}
                     <tr class="text-[#6b5b3d]">
-                        <td class="py-2 text-center">EE-0001</td>
-                        <td class="py-2 text-center">24/06/24</td>
-                        <td class="py-2 text-center">Ángeles Martínez</td>
-                        <td class="py-2 text-center">$2,320</td>
-                        <td class="py-2 text-center">001</td>
+                        <td class="py-2 text-center">S-{{cot.cotizacion_id}}</td>
+                        <td class="py-2 text-center">{{cot.fecha|date:"d/m/Y"}}</td>
+                        <td class="py-2 text-center">{{cot.cliente.nombre}}</td>
+                        <td class="py-2 text-center">${{cot.total}}</td>
+                        <td class="py-2 text-center">{{cot.usuario_generador.username}}</td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

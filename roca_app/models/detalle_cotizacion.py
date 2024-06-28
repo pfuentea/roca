@@ -6,6 +6,8 @@ from .motor import Motor
 from .gateway import Gateway
 from .cenefa import Cenefa
 from .control import Control
+from .resumen_cotizacion import ResumenCotizacion  # Importa el modelo ResumenCotizacion
+
 
 class DetalleCotizacion(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
@@ -21,6 +23,8 @@ class DetalleCotizacion(models.Model):
     costo_instalacion_roller = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     costo_instalacion_cenefa = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     cantidad = models.IntegerField(default=1)
+    resumen_cotizacion = models.ForeignKey(ResumenCotizacion, on_delete=models.CASCADE, default=1)  # Clave foránea
+    total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, default=0)  # Nuevo campo total
 
     def __str__(self):
         return f"Detalle de Cotización para {self.cliente.nombre} - {self.roller.nombre}"

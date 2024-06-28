@@ -15,13 +15,16 @@ urlpatterns = [
 
     path('dashboard/', views.dashboard_redirect, name='dashboard'),
 
-
+    # init generar cotizacion
     path('panel_usuario/', views.panel_usuario, name='panel_usuario'),
-    path('usuario_producto/', views.usuario_producto, name='usuario_producto'),
-    path('cotizacion_export/', views.cotizacion_export, name='cotizacion_export'),
-
+    # agrega items cotizacion
+    path('usuario_producto/<int:cliente_id>/<int:resumen_id>/', views.usuario_producto, name='usuario_producto'),
+    # export pdf
+    path('cotizacion_export/<int:resumen_id>', views.cotizacion_export, name='cotizacion_export'),
+    #admin
     path('panel_admin/', views.panel_admin, name='panel_admin'),
     path('admin_cotizaciones/', views.admin_cotizaciones, name='admin_cotizaciones'),
-    path('cotizacion_export/', views.cotizacion_export, name='cotizacion_export'),
+
+    #path('cotizacion_export/', views.cotizacion_export, name='cotizacion_export'),
 
 ]

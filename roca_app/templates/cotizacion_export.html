@@ -3,68 +3,79 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!--jQUERY-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="  crossorigin="anonymous"></script>
+    <!--DATATABLES-->    
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <!--DATATABLES EXPORT-->   
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
+        }
+        .d-none{
+            display: none;
         }
     </style>
 </head>
 <body class="bg-[#D7B391] flex items-center justify-center min-h-screen">
     <div class="bg-[#D7B391] w-[400px] p-6 rounded-lg">
-        <h1 class="text-center text-xl font-bold text-[#5a4e3c]">Cotización N<br>EE-00001</h1>
+        <h1 class="text-center text-xl font-bold text-[#5a4e3c]">Cotización N:<br>S-{{cotizacion_id}}</h1>
         <div class="bg-[#D7B391] p-4 mt-4 rounded-lg">
+            {% for linea in detalles %}
             <div class="flex justify-between items-center border-b border-[#5a4e3c] pb-2 mb-2">
-                <span class="font-bold text-[#5a4e3c]">1. Item + Medidas</span>
-                <span class="text-[#5a4e3c]">x2</span>
-                <span class="font-bold text-[#5a4e3c]">U$D 250.00</span>
+                <span class="font-bold text-[#5a4e3c]">{{linea.roller.nombre}}  {{linea.roller.diametro.descripcion}} 
+                </span style="font-size:9px">
+                
+                <span>
+                <span style="font-size:9px" class="dec_target">
+                     ({{ linea.ancho }} 
+                </span >
+                
+                <span style="font-size:9px">
+                    x
+                </span>
+                <span style="font-size:9px" class="dec_target">
+                    {{linea.alto}})
+                </span>
+            </span style="font-size:9px">
+            
+            <span>
+
+            </span>
+                <span class="text-[#5a4e3c]">x {{ linea.cantidad}}</span>
+                <span class="font-bold text-[#5a4e3c]">U$D {{linea.total}}</span>
             </div>
             <div class="text-[#5a4e3c]">
-                <p>Cenefa</p>
-                <p>Gateway</p>
-                <p>Motor eléct</p>
-                <p>Instalación</p>
-                <p>C. Remoto</p>
+                <p>Cenefa:  {% if linea.cenefa.nombre  %}
+                    {{linea.cenefa.nombre}}
+                     {% else %}N/A {% endif %}</p>
+                <p>Gateway:  {% if linea.gateway.nombre  %}
+                    {{linea.gateway.nombre}}{% else %}N/A {% endif %}</p>
+                <p>Motor eléct: {% if linea.motor.nombre  %}
+                    {{linea.motor.nombre}} {% else %}N/A{% endif %} </p>
+                <p>Instalación: Roller {% if linea.cenefa.nombre  %} - Cenefa {% endif %} 
+                    {% if linea.motor.nombre  %} - Motor {% endif %}
+                </p>
+                <p>C. Remoto: {% if linea.control.nombre  %}
+                    {{linea.control.nombre}} {% else %}N/A{% endif %}</p>
             </div>
-            <div class="flex justify-between items-center border-b border-[#5a4e3c] pb-2 mb-2 mt-4">
-                <span class="font-bold text-[#5a4e3c]">2. Item + Q (diámetro)</span>
-                <span class="font-bold text-[#5a4e3c]">U$D 125.00</span>
-            </div>
-            <div class="text-[#5a4e3c]">
-                <p>Cenefa</p>
-                <p>Gateway</p>
-                <p>Motor eléct</p>
-                <p>Instalación</p>
-                <p>C. Remoto</p>
-            </div>
-            <div class="flex justify-between items-center border-b border-[#5a4e3c] pb-2 mb-2 mt-4">
-                <span class="font-bold text-[#5a4e3c]">3. Item + Q (diámetro)</span>
-                <span class="font-bold text-[#5a4e3c]">U$D 125.00</span>
-            </div>
-            <div class="text-[#5a4e3c]">
-                <p>Cenefa</p>
-                <p>Gateway</p>
-                <p>Motor eléct</p>
-                <p>Instalación</p>
-                <p>C. Remoto</p>
-            </div>
-            <div class="flex justify-between items-center border-b border-[#5a4e3c] pb-2 mb-2 mt-4">
-                <span class="font-bold text-[#5a4e3c]">4. Item + Q (diámetro)</span>
-                <span class="font-bold text-[#5a4e3c]">U$D 125.00</span>
-            </div>
-            <div class="text-[#5a4e3c]">
-                <p>Cenefa</p>
-                <p>Gateway</p>
-                <p>Motor eléct</p>
-                <p>Instalación</p>
-                <p>C. Remoto</p>
-            </div>
+            {% endfor %}
+
+            
             <div class="flex justify-between items-center border-t border-[#5a4e3c] pt-2 mt-4">
                 <span class="font-bold text-[#5a4e3c]">Sin IGV</span>
-                <span class="font-bold text-[#5a4e3c]">U$D 500.00</span>
+                <span class="font-bold text-[#5a4e3c]">U$D {{resumen.total}}</span>
             </div>
             <div class="flex justify-between items-center">
                 <span class="font-bold text-[#5a4e3c]">Precio Total</span>
-                <span class="font-bold text-[#5a4e3c]">U$D 590.00</span>
+                <span class="font-bold text-[#5a4e3c]">U$D {{resumen_total_igv}}</span>
             </div>
         </div>
         <div class="bg-[#7a6a5e] p-4 mt-4 rounded-lg">
@@ -78,10 +89,123 @@
                 <li>Garantía del producto, 5 años.</li>
             </ul>
         </div>
+
+        <div class="table-responsive" id="table_content">
+            <table id="cotizacion" class="table table-striped table-bordered" width="100%" >
+                <thead>
+                    <tr>
+                        <th>
+                            Cotizacion N: S-{{cotizacion_id}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for linea in detalles %}
+                    <tr>
+                        <td>
+                            {{linea.roller.nombre}}  {{linea.roller.diametro.descripcion}} ({{ linea.ancho }}X{{linea.alto}}  ) x {{ linea.cantidad}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Cenefa:  {% if linea.cenefa.nombre  %}
+                            {{linea.cenefa.nombre}}
+                            {% else %}N/A {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Gateway:  {% if linea.gateway.nombre  %}
+                            {{linea.gateway.nombre}}{% else %}N/A {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Motor eléct: {% if linea.motor.nombre  %}
+                            {{linea.motor.nombre}} {% else %}N/A{% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Instalación: Roller {% if linea.cenefa.nombre  %} - Cenefa {% endif %} 
+                            {% if linea.motor.nombre  %} - Motor {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            C. Remoto: {% if linea.control.nombre  %}
+                            {{linea.control.nombre}} {% else %}N/A{% endif %}
+                        </td>
+                    </tr>
+                        
+                    
+                    {% endfor %}
+                    <tr>
+                        <td>Sin IGV: U$D {{resumen.total}}</td>
+                    </tr>
+                    <tr>
+                        <td>Sin IGV: U$D {{resumen_total_igv}}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Términos y condiciones            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Precios expresados en dólares, incluyen el ire metrado, impuestos de ley (IGV) e instalación, vigencia de oferta para Lima metropolitana es de 15 días.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Forma de pago: 70% adelanto, saldo contra entrega.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Plazo de entrega: 5-6 días útiles (Sujeto a disponibilidad de stock), desde el pago del adelanto.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>En el presupuesto motorizado, el presente documento NO INCLUYE la generación del punto eléctrico y los trabajos asociados al mismo (alimentación eléctrica, pase de pared, resane y pintado de la misma).</td>
+                    </tr>
+                    <tr>
+                        <td>El color de la cenefa será en negro y blanco. NO SE INCLUYE perfil de aluminio para la cenefa, en caso requiera, debe solicitar la inversión adicional.</td>
+                    </tr>
+                    <tr>
+                        <td>Garantía del producto, 5 años.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
         <div class="flex justify-between mt-4">
             <button class="bg-[#5a4e3c] text-white py-2 px-4 rounded-lg hover:bg-[#3e3a32] transition duration-300">Volver</button>
-            <button class="bg-[#5a4e3c] text-white py-2 px-4 rounded-lg hover:bg-[#3e3a32] transition duration-300">Exportar PDF</button>
+            <button class="bg-[#5a4e3c] text-white py-2 px-4 rounded-lg hover:bg-[#3e3a32] transition duration-300" id="exportar_pdf">Exportar PDF</button>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            var oTblReport = $('#cotizacion')
+            oTblReport.DataTable({
+                "ordering": false,
+                dom: 'Bfrtip',
+                buttons: [
+                 {
+                    extend: 'pdf',
+                    title:'Cotizacion'
+                    }
+                ],
+                "search": 'Buscar',
+                "aLengthMenu":[[5,10,15,25,-1],[5,10,15,25,"All"]],
+                "iDisplayLength":15
+            });
+        $('#cotizacion_filter').addClass('d-none');
+        $('#table_content').addClass('d-none');
+        $('#exportar_pdf').on('click',function(){
+            $('.buttons-pdf').click();
+        })
+        
+    });
+    </script>
 </body>
 </html>
