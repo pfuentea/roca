@@ -66,24 +66,12 @@ def crear_producto(request):
 
 
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
-            return redirect('login')  # Redirige al usuario a la página de login o donde desees
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
-
-
 
 
 def panel_usuario(request):
     context={}
     if request.method == "POST":
+        print("crear")
         form = ClienteForm(request.POST)
         if form.is_valid():
             cliente = form.save()
@@ -94,6 +82,8 @@ def panel_usuario(request):
             )
             return redirect('usuario_producto',  cliente_id=cliente.id, resumen_id=resumen.id)
         else:
+            for field, errors in form.errors.items():
+                print(f"Error en el campo {field}: {errors}")
             return render(request, 'usuario_cotizacion.html', context)
     else:
         
@@ -219,11 +209,35 @@ def cotizacion_export(request,resumen_id):
     
 
 def panel_admin(request):
-    
+    if request.method == 'POST':
+        print(request.POST)
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            return redirect('panel_admin')  # Redirige al usuario a la página de login o donde desees
+    else:
+        form = UserCreationForm()
     context={
         
     }
     return render(request, 'panel_admin.html', context)
+
+def register(request):
+    if request.method == 'POST':
+        print(request.POST)
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            return redirect('panel_admin')  # Redirige al usuario a la página de login o donde desees
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+
 
 def admin_cotizaciones(request):
     cotizaciones=ResumenCotizacion.objects.all().order_by('-fecha')
