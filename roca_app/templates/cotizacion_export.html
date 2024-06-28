@@ -95,7 +95,7 @@
                 <thead>
                     <tr>
                         <th>
-                            Cotizacion N: S-{{cotizacion_id}}
+                            Cotización N: S-{{cotizacion_id}}
                         </th>
                     </tr>
                 </thead>
@@ -103,7 +103,7 @@
                     {% for linea in detalles %}
                     <tr>
                         <td>
-                            {{linea.roller.nombre}}  {{linea.roller.diametro.descripcion}} ({{ linea.ancho }}X{{linea.alto}}  ) x {{ linea.cantidad}}
+                            {{linea.roller.nombre}}  {{linea.roller.diametro.descripcion}} ({{ linea.ancho }}X{{linea.alto}}  ) x {{ linea.cantidad}} : U$D {{linea.total}}
                         </td>
                     </tr>
                     <tr>
@@ -195,7 +195,7 @@
                 buttons: [
                 {
                     extend: 'pdf',
-                    title:'Cotizacion'
+                    title:'Cotización'
                     }
                 ],
                 "search": 'Buscar',
