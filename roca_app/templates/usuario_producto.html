@@ -17,13 +17,17 @@
             transform: scale(1.05);
             transition: transform 0.3s ease-in-out;
         }
+        .d-none{
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-[#D7B391] flex items-center justify-center min-h-screen">
     <div class="w-full max-w-xs">
         <div class="text-center mb-6">
             <h1 class="text-2xl font-bold text-[#4a4a4a]">Cotización N</h1>
-            <p class="text-xl font-semibold text-[#4a4a4a]">S-00{{resumen.id}}</p>
+            <p class="text-xl font-semibold text-[#4a4a4a]">S-{{resumen.cotizacion_id}}</p>
+            <p class="d-none">Cantidad de Productos: {{num_items}}</p>
         </div>
 
         <div class="bg-[#D7B391] p-6 rounded-lg shadow-md">
@@ -115,9 +119,10 @@
                 </div>
             </form>
         </div>
-        <div class="text-center mt-6">
-            <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Emitir</button>
-            <a href="/cotizacion_export/{{resumen.id}}">Emitir</a>
+        <div class="text-center mt-6 mb-5"> 
+            <a href="/cotizacion_export/{{resumen.id}}">
+                <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Emitir</button>
+            </a>
         </div>
     </div>
     <script>

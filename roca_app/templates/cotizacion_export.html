@@ -178,7 +178,10 @@
         </div>
 
         <div class="flex justify-between mt-4">
-            <button class="bg-[#5a4e3c] text-white py-2 px-4 rounded-lg hover:bg-[#3e3a32] transition duration-300">Volver</button>
+            <a href="/usuario_producto/{{resumen.cliente_id}}/{{resumen.id}}">
+                <button class="bg-[#5a4e3c] text-white py-2 px-4 rounded-lg hover:bg-[#3e3a32] transition duration-300">Volver</button>
+            </a>
+            
             <button class="bg-[#5a4e3c] text-white py-2 px-4 rounded-lg hover:bg-[#3e3a32] transition duration-300" id="exportar_pdf">Exportar PDF</button>
         </div>
     </div>
@@ -190,7 +193,7 @@
                 "ordering": false,
                 dom: 'Bfrtip',
                 buttons: [
-                 {
+                {
                     extend: 'pdf',
                     title:'Cotizacion'
                     }

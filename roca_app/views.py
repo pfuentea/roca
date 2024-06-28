@@ -125,7 +125,8 @@ def usuario_producto(request, cliente_id,resumen_id):
                 print(f"Error en el campo {field}: {errors}")
         
     
-    
+    num_items = DetalleCotizacion.objects.filter(resumen_cotizacion_id=resumen.id).count()
+
     diametros=Diametro.objects.all()
     rollers = Roller.objects.values_list('nombre', flat=True).distinct()  # Obtén nombres únicos de rollers
     motores= Motor.objects.all()
@@ -142,6 +143,7 @@ def usuario_producto(request, cliente_id,resumen_id):
         'controles': controles,
         'cliente':cliente,
         'resumen':resumen,
+        'num_items':num_items,
     }
     return render(request, 'usuario_producto.html', context)
 
@@ -161,10 +163,9 @@ def cotizacion_export(request,resumen_id):
     #tenemos que calcular el total
     resumen = get_object_or_404(ResumenCotizacion, id=resumen_id)    
     detalles = DetalleCotizacion.objects.filter(resumen_cotizacion=resumen)
-    total_item=0
     total_resumen=0
     for item in detalles:
-        
+        total_item=0
         cantidad=item.cantidad
         print(f"cantidad:{cantidad}")
         precio_motor=0
@@ -195,7 +196,7 @@ def cotizacion_export(request,resumen_id):
         print(f"INST:{precio_instalacion}")
         total_item=(precio_motor*cantidad)+(precio_cenefa*cantidad)+(precio_control*cantidad)+(precio_gateway*cantidad)+precio_instalacion+(precio_roller*cantidad)
     
-        print(f"total:{total_item}")
+        print(f"total item:{total_item}")
         item.total=total_item
         item.save()
         total_resumen+=total_item
@@ -225,7 +226,7 @@ def panel_admin(request):
     return render(request, 'panel_admin.html', context)
 
 def admin_cotizaciones(request):
-    cotizaciones=ResumenCotizacion.objects.all()
+    cotizaciones=ResumenCotizacion.objects.all().order_by('-fecha')
     context={
         'cotizaciones':cotizaciones,
     }
