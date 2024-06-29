@@ -2,3 +2,5 @@
 **/*/migrations
 db.sqlite3
 .env
+id_rsa.pub
+deslizza.txt.pub
