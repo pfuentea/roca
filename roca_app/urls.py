@@ -26,5 +26,7 @@ urlpatterns = [
     path('admin_cotizaciones/', views.admin_cotizaciones, name='admin_cotizaciones'),
 
     #path('cotizacion_export/', views.cotizacion_export, name='cotizacion_export'),
-
+    path('get_diametros/', views.get_diametros, name='get_diametros'),
+    path('get_roller_id/', views.get_roller_id, name='get_roller_id'),
+    path('get_max_dimensions/', views.get_max_dimensions, name='get_max_dimensions'),
 ]

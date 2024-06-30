@@ -13,6 +13,9 @@ from .models import *
 from .forms.clienteForm import ClienteForm
 from .forms.resumenCotizacionForm import ResumenCotizacionForm
 from .forms.cotizacionForm import DetalleCotizacionForm
+from django.http import JsonResponse
+from .models.diametro import Diametro
+from django.db.models import Max
 
 def index(request):
 
@@ -67,19 +70,36 @@ def crear_producto(request):
 
 
 
-
+@login_required(login_url='/')
 def panel_usuario(request):
-    context={}
+    context={
+        'usuario': request.user,
+    }
+    print(f"R.user:{request.user}")
     if request.method == "POST":
         print("crear")
         form = ClienteForm(request.POST)
         if form.is_valid():
+            print("guardando cliente")
             cliente = form.save()
-            resumen = ResumenCotizacion.objects.create(
-                cliente=cliente,
-                usuario_generador=request.user,
-                total=0,
-            )
+            print("guardando cliente:sucess")
+            print("creando resumen")
+            #print(f"cliente:{cliente}")
+            print(f"User:{request.user}")
+            try:
+                resumen = ResumenCotizacion.objects.create(
+                    cliente=cliente,
+                    usuario_generador=request.user,
+                    total=0,
+                )
+            except Exception as e:
+                print(f"Error al crear ResumenCotizacion: {e}")
+
+            print("resumen listo")
+            
+            resumen.cotizacion_id=str(resumen.id).zfill(4)
+            resumen.save()
+            print("go to:usuario_producto")
             return redirect('usuario_producto',  cliente_id=cliente.id, resumen_id=resumen.id)
         else:
             for field, errors in form.errors.items():
@@ -88,10 +108,13 @@ def panel_usuario(request):
     else:
         
         return render(request, 'usuario_cotizacion.html', context)
-
+    
+@login_required(login_url='/')
 def usuario_producto(request, cliente_id,resumen_id):
+    print("Init:usuario_producto(2)")
     resumen = get_object_or_404(ResumenCotizacion, id=resumen_id)
     cliente = get_object_or_404(Cliente, id=cliente_id)
+
     if request.method == 'POST':
         print(request.POST)
         roller_name = request.POST.get('roller_name').strip()
@@ -149,6 +172,7 @@ def roller_price(roller,ancho,alto):
     resultado=precio.precio
     return resultado
 
+@login_required(login_url='/')
 def cotizacion_export(request,resumen_id):
     #tenemos que calcular el total
     resumen = get_object_or_404(ResumenCotizacion, id=resumen_id)    
@@ -208,6 +232,7 @@ def cotizacion_export(request,resumen_id):
     return render(request, 'cotizacion_export.html', context)
     
 
+@login_required(login_url='/')
 def panel_admin(request):
     if request.method == 'POST':
         print(request.POST)
@@ -238,7 +263,7 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
-
+@login_required(login_url='/')
 def admin_cotizaciones(request):
     cotizaciones=ResumenCotizacion.objects.all().order_by('-fecha')
     context={
@@ -246,6 +271,49 @@ def admin_cotizaciones(request):
     }
     return render(request, 'admin_cotizaciones.html', context)
 
+@login_required(login_url='/')
 def panel_admin(request):
     context={}
     return render(request, 'panel_admin.html', context)
+
+def get_diametros(request):
+    roller_name = request.GET.get('roller_name')
+    rollers = Roller.objects.filter(nombre=roller_name)
+    diametros = Diametro.objects.filter(roller__in=rollers).distinct()
+    diametro_list = [{'id': diametro.id, 'descripcion': diametro.descripcion} for diametro in diametros]
+    return JsonResponse(diametro_list, safe=False)
+
+def get_roller_id(request):
+    roller_name = request.GET.get('roller_name')
+    diametro_id = request.GET.get('diametro_id')
+    try:
+        rollers = Roller.objects.filter(nombre=roller_name,diametro_id=diametro_id).first()
+        #diametros = Diametro.objects.filter(roller__in=rollers).distinct()
+        roller_id = [{'id': rollers.id} ]
+        print(f"Roller id:{roller_id}")
+        return JsonResponse(roller_id, safe=False)
+    except Exception as e:
+        print(e)
+
+def get_max_dimensions(request):
+    roller_id = request.GET.get('roller_id')
+    if roller_id:
+        try:
+            precios = Precio.objects.filter(roller_id=roller_id)
+            total=len(precios)
+            print(f"total de registros:{total}")
+            max_ancho = precios.aggregate(Max('ancho_final'))['ancho_final__max']
+            max_alto = precios.aggregate(Max('alto_final'))['alto_final__max']
+            print(f"max_ancho:{max_ancho}")
+            print(f"max_alto:{max_alto}")
+            if max_alto is None:
+                max_alto = 1
+            if max_ancho is None:
+                max_ancho = 1
+            return JsonResponse({'max_ancho': max_ancho, 'max_alto': max_alto ,'total':total})
+        except Exception as e:
+            print(e)
+            return JsonResponse({'max_ancho': 1, 'max_alto': 1})
+
+    return JsonResponse({'max_ancho': 1, 'max_alto': 1})
+

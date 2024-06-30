@@ -20,6 +20,9 @@
         .d-none{
             display: none;
         }
+        .subindice{
+            font-size: 0.6em;
+        }
     </style>
 </head>
 <body class="bg-[#D7B391] flex items-center justify-center min-h-screen">
@@ -31,34 +34,32 @@
         </div>
 
         <div class="bg-[#D7B391] p-6 rounded-lg shadow-md">
-            <form method="post">
+            <form method="post" id="add_producto">
                 {% csrf_token %}
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Item</label>
-                    <select class="w-full p-2 border border-gray-300 rounded" name="roller_name">
-                        <option>Seleccionar</option>
+                    <select class="w-full p-2 border border-gray-300 rounded" id="roller_name" name="roller_name" required>
+                        <option value="0">Seleccionar</option>
                         {% for roller in rollers %}
                         <option>{{ roller }}</option>
                         {% endfor %}
                     </select>
                 </div>
+
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Q (diámetro)</label>
-                    <select class="w-full p-2 border border-gray-300 rounded" name="diametro_id">
-                        <option>Seleccionar</option>
-                        {% for diametro in diametros %}
-                        <option value="{{ diametro.id }}" >{{ diametro.descripcion }}</option>
-                        {% endfor %}
+                    <select class="w-full p-2 border border-gray-300 rounded" id="diametro_id" name="diametro_id">
+                        <option value="0">Seleccionar</option>
                     </select>
                 </div>
                 <div class="mb-4 flex space-x-2">
                     <div class="w-1/2">
-                        <label class="block text-[#4a4a4a] mb-2">Alto cm</label>
-                        <input type="text" class="w-full p-2 border border-gray-300 rounded" name="alto">
+                        <label class="block text-[#4a4a4a] mb-2">Alto cm <span id="max_alto" class="subindice"></span> </label>
+                        <input type="text" class="w-full p-2 border border-gray-300 rounded" id="alto" name="alto">
                     </div>
                     <div class="w-1/2">
-                        <label class="block text-[#4a4a4a] mb-2">Ancho cm</label>
-                        <input type="text" class="w-full p-2 border border-gray-300 rounded" name="ancho">
+                        <label class="block text-[#4a4a4a] mb-2">Ancho cm <span id="max_ancho" class="subindice"></span></label>
+                        <input type="text" class="w-full p-2 border border-gray-300 rounded" id="ancho" name="ancho">
                     </div>
                 </div>
                 <div class="mb-4">
@@ -114,15 +115,24 @@
                     <input type="text" class="p-2 border border-gray-300 rounded" required value="1" id="cantidad" name="cantidad">
                 </div>
                 <div class="flex justify-between">
-                    <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Cancelar</button>
+                    <a href="{% url 'panel_usuario' %}">
+                        <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Cancelar</button>
+                    </a>
                     <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Guardar y añadir producto</button>
                 </div>
+                <input type="hidden" name="roller_id" id="roller_id" value="">
             </form>
         </div>
         <div class="text-center mt-6 mb-5"> 
+            {{num_items}}
+            {% if num_items != 0 %}
             <a href="/cotizacion_export/{{resumen.id}}">
-                <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Emitir</button>
+            {% endif %}
+                <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation" {% if num_items == 0 %} onclick="alert('debe agregar al menos 1 producto')" {% endif %} >Emitir</button>
+                {% if num_items != 0 %}
             </a>
+                {% endif %}
+                
         </div>
     </div>
     <script>
@@ -158,9 +168,137 @@
                 
                 $('#inst_cenefa').val(cenefa*nuevoValor);
             });
-            
 
 
+            $('#add_producto').on('submit', function(event) {
+                // Evita que el formulario se envíe por defecto
+                event.preventDefault();
+                
+                // Variable para controlar si el formulario es válido
+                var isValid = true;
+                
+                // Selecciona los campos a validar
+                var select1 = $('#roller_name');
+                var select2= $('#diametro_id');
+                var input1 = $('#alto');
+                var input2 = $('#ancho');
+                var ancho = parseFloat($('#ancho').val());
+                var alto = parseFloat($('#alto').val());
+                var maxAncho = parseFloat($('#ancho').attr('max'));
+                var maxAlto = parseFloat($('#alto').attr('max'));
+
+                if (ancho > maxAncho) {
+                    alert('El ancho debe ser menor o igual al máximo permitido.');
+                    isValid = false;
+                }
+
+                if (alto > maxAlto) {
+                    alert('El alto debe ser menor o igual al máximo permitido.');
+                    isValid = false;
+                }
+                
+                // Valida el select
+                if (select1.val() == "0") {
+                    isValid = false;
+                    alert('Por favor, seleccione un roller.');
+                    select1.focus();
+                    return false; // Detiene la ejecución si el campo no es válido
+                }
+                if (select2.val() == "0") {
+                    isValid = false;
+                    alert('Por favor, seleccione el diamtro.');
+                    select2.focus();
+                    return false; // Detiene la ejecución si el campo no es válido
+                }
+                
+                // Valida el input
+                if (input1.val().trim() === "") {
+                    isValid = false;
+                    alert('Por favor, ingrese un valor en el alto.');
+                    input1.focus();
+                    return false; // Detiene la ejecución si el campo no es válido
+                }
+                if (input2.val().trim() === "") {
+                    isValid = false;
+                    alert('Por favor, ingrese un valor en el ancho.');
+                    input2.focus();
+                    return false; // Detiene la ejecución si el campo no es válido
+                }
+                // Si todos los campos son válidos, envía el formulario
+                if (isValid) {
+                    this.submit();
+                }
+            });
+
+            function updateMaxDimensions(rollerId) {
+            $.ajax({
+                url: '{% url "get_max_dimensions" %}',
+                data: {
+                    'roller_id': rollerId
+                },
+                success: function(data) {
+                    console.log(data);
+                    if (data.max_ancho && data.max_alto) {
+                        $('#ancho').attr('max', data.max_ancho);
+                        $('#alto').attr('max', data.max_alto);
+                        $('#max_alto').text("(Max:"+parseInt(data.max_alto)+")");
+                        $('#max_ancho').text("(Max:"+parseInt(data.max_ancho)+")");
+                        
+                    }
+                }
+            });
+        }
+
+        $('#roller_name').change(function() {
+            var rollerName = $(this).val();
+            if (rollerName && rollerName !== "0") {
+                $.ajax({
+                    url: '{% url "get_diametros" %}',
+                    data: {
+                        'roller_name': rollerName
+                    },
+                    success: function(data) {
+                        $('#diametro_id').empty();
+                        $('#diametro_id').append('<option value="">Seleccione un diámetro</option>');
+                        $.each(data, function(index, item) {
+                            $('#diametro_id').append('<option value="' + item.id + '">' + item.descripcion + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#diametro_id').empty();
+                $('#diametro_id').append('<option value="">Seleccione un diámetro</option>');
+                $('#ancho').removeAttr('max');
+                $('#alto').removeAttr('max');
+                $('#roller_id').val('');
+            }
+        });
+
+        $('#diametro_id').change(function() {
+            var rollerName = $('#roller_name').val();
+            var diametroId = $(this).val();
+            if (rollerName && rollerName !== "0" && diametroId) {
+                $.ajax({
+                    url: '{% url "get_roller_id" %}',
+                    data: {
+                        'roller_name': rollerName,
+                        'diametro_id': diametroId
+                    },
+                    success: function(data) {
+                        console.log(data)
+                        console.log("data[0].id:"+data[0].id)
+                        if (data[0].id) {
+                            $('#roller_id').val(data[0].id);
+                            updateMaxDimensions(data[0].id);
+                        }
+                    }
+                });
+            } else {
+                $('#ancho').removeAttr('max');
+                $('#alto').removeAttr('max');
+                $('#roller_id').val('');
+            }
+        });
 
 
         });
