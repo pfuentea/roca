@@ -41,7 +41,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 
-                messages.success(request, f"Bienvenido, {username}!")
+                #messages.success(request, f"Bienvenido, {username}!")
                 login(request, user)
                 return redirect('dashboard')  # Reemplaza 'home' con el nombre de la URL a la que quieres redirigir
             else:
@@ -141,7 +141,7 @@ def usuario_producto(request, cliente_id,resumen_id):
     num_items = DetalleCotizacion.objects.filter(resumen_cotizacion_id=resumen.id).count()
 
     diametros=Diametro.objects.all()
-    rollers = Roller.objects.values_list('nombre', flat=True).distinct()  # Obtén nombres únicos de rollers
+    rollers = Roller.objects.values_list('nombre', flat=True).distinct().order_by('nombre')  # Obtén nombres únicos de rollers
     motores= Motor.objects.all()
     cenefas=Cenefa.objects.all()
     gateways=Gateway.objects.all()
@@ -260,7 +260,9 @@ def register(request):
             return redirect('panel_admin')  # Redirige al usuario a la página de login o donde desees
     else:
         form = UserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
+    return redirect('panel_admin')
+
+    #return render(request, 'registration/register.html', {'form': form})
 
 
 @login_required(login_url='/')

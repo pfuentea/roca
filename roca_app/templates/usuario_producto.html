@@ -89,9 +89,10 @@
                         {% endfor %}
                     </select>
                 </div>
+                <input type="hidden" name="cenefa_id" value="" id="cenefa_id">
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Cenefa</label>
-                    <select class="w-full p-2 border border-gray-300 rounded"  id="cenefas" name="cenefa_id">
+                    <select class="w-full p-2 border border-gray-300 rounded"  id="cenefas" name="cenefas">
                         <option value="" value2="0">No</option>
                         {% for cenefa in cenefas %}
                         <option value="{{ cenefa.id }}" value2="{{ cenefa.precio }}">{{ cenefa.nombre }}</option>
@@ -124,7 +125,8 @@
             </form>
         </div>
         <div class="text-center mt-6 mb-5"> 
-            {{num_items}}
+            <p>Cantidad de items: {{num_items}}
+            </p>
             {% if num_items != 0 %}
             <a href="/cotizacion_export/{{resumen.id}}">
             {% endif %}
@@ -144,28 +146,24 @@
                 if( $('#motores').val() != ""){
                     var valor = 22.45;
                     $('#inst_motor').val(valor);
-                    console.log(valor)
                 }
                 else{
                     $('#inst_motor').val(0);
                 }
             });
 
-            $('#cenefas').change(function() {
-                
-                    var valor = $(this).find('option:selected').attr('value2');
-                    var cantidad = $('#cantidad').val();
-                    $('#inst_cenefa').val(valor*cantidad);
-                    console.log(valor)
-                
+            $('#cenefas').change(function() {                
+                var valor = $(this).find('option:selected').attr('value2');
+                var cantidad = $('#cantidad').val();
+                $('#cenefa_id').val($(this).find('option:selected').attr('value'));
+                $('#inst_cenefa').val(valor*cantidad);
             });
 
             $('#cantidad').change(function() {
                 var nuevoValor = $(this).val();
                 // Ejemplo de actualización del input inst_roller
                 $('#inst_roller').val(nuevoValor*7.72);
-                var cenefa = $('#cenefas').find('option:selected').attr('value2');
-                
+                var cenefa = $('#cenefas').find('option:selected').attr('value2');                
                 $('#inst_cenefa').val(cenefa*nuevoValor);
             });
 
@@ -272,6 +270,21 @@
                 $('#alto').removeAttr('max');
                 $('#roller_id').val('');
             }
+            
+            if (rollerName == "Twinline"){
+                $('#cenefas').val('2');
+                $('#cenefas').prop('disabled', true);                
+            }
+            else{
+                $('#cenefas').prop('disabled', false);
+            }
+            var valor = $('#cenefas').find('option:selected').attr('value2');
+            var cantidad = $('#cantidad').val();
+            $('#inst_cenefa').val(valor*cantidad);
+            $('#cenefa_id').val($('#cenefas').find('option:selected').val());
+            console.log($('#cenefas').val())
+            console.log($('#cenefa_id').val())
+
         });
 
         $('#diametro_id').change(function() {
@@ -285,8 +298,8 @@
                         'diametro_id': diametroId
                     },
                     success: function(data) {
-                        console.log(data)
-                        console.log("data[0].id:"+data[0].id)
+                        //console.log(data)
+                        //console.log("data[0].id:"+data[0].id)
                         if (data[0].id) {
                             $('#roller_id').val(data[0].id);
                             updateMaxDimensions(data[0].id);
@@ -301,7 +314,7 @@
         });
 
 
-        });
+    });
     </script>
 </body>
 </html>
