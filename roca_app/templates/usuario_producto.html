@@ -116,10 +116,10 @@
                     <input type="text" class="p-2 border border-gray-300 rounded" required value="1" id="cantidad" name="cantidad">
                 </div>
                 <div class="flex justify-between">
-                    <a href="{% url 'panel_usuario' %}">
-                        <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Cancelar</button>
+                    <a href="{% url 'panel_usuario' %}" >
+                        <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation" id="btn_cancelar">Cancelar</button>
                     </a>
-                    <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation">Guardar y añadir producto</button>
+                    <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation" type="submit">Guardar y añadir producto</button>
                 </div>
                 <input type="hidden" name="roller_id" id="roller_id" value="">
             </form>
@@ -134,7 +134,11 @@
                 {% if num_items != 0 %}
             </a>
                 {% endif %}
+
                 
+        </div>
+        <div class="text-center mt-6 mb-5">
+            <a href="/logout">Cerrar Sesión</a>
         </div>
     </div>
     <script>
@@ -165,6 +169,11 @@
                 $('#inst_roller').val(nuevoValor*7.72);
                 var cenefa = $('#cenefas').find('option:selected').attr('value2');                
                 $('#inst_cenefa').val(cenefa*nuevoValor);
+            });
+
+            $('#btn_cancelar').on('click', function(event) {
+                event.preventDefault(); // Prevenir cualquier comportamiento predeterminado
+                window.location.href = "{% url 'panel_usuario' %}"; // Redirigir a la URL deseada
             });
 
 
