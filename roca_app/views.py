@@ -188,8 +188,11 @@ def cotizacion_export(request,resumen_id):
         print(f"motor:{precio_motor}")
         precio_cenefa=0
         if(item.cenefa_id is not None):
-            precio_cenefa = Cenefa.objects.get(id=item.cenefa_id).precio
-        print(f"cen:{precio_cenefa}")
+            cenefa=Cenefa.objects.get(id=item.cenefa_id)
+            precio_cenefa = cenefa.precio * (item.ancho)/1000
+            print(f"cenefa:{cenefa.precio}")
+            print(f"ancho:{item.ancho}")
+            print(f"total cenefa:{precio_cenefa}")
         precio_control=0
         if(item.control_id is not None):
             precio_control = Control.objects.get(id=item.control_id).precio

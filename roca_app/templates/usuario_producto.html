@@ -34,7 +34,7 @@
         </div>
 
         <div class="bg-[#D7B391] p-6 rounded-lg shadow-md">
-            <form method="post" id="add_producto">
+            <form method="post" id="add_producto" >
                 {% csrf_token %}
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Item</label>
@@ -54,11 +54,11 @@
                 </div>
                 <div class="mb-4 flex space-x-2">
                     <div class="w-1/2">
-                        <label class="block text-[#4a4a4a] mb-2">Alto cm <span id="max_alto" class="subindice"></span> </label>
+                        <label class="block text-[#4a4a4a] mb-2">Alto mm <span id="max_alto" class="subindice"></span> </label>
                         <input type="text" class="w-full p-2 border border-gray-300 rounded" id="alto" name="alto">
                     </div>
                     <div class="w-1/2">
-                        <label class="block text-[#4a4a4a] mb-2">Ancho cm <span id="max_ancho" class="subindice"></span></label>
+                        <label class="block text-[#4a4a4a] mb-2">Ancho mm <span id="max_ancho" class="subindice"></span></label>
                         <input type="text" class="w-full p-2 border border-gray-300 rounded" id="ancho" name="ancho">
                     </div>
                 </div>
@@ -116,13 +116,14 @@
                     <input type="text" class="p-2 border border-gray-300 rounded" required value="1" id="cantidad" name="cantidad">
                 </div>
                 <div class="flex justify-between">
-                    <a href="{% url 'panel_usuario' %}" >
-                        <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation" id="btn_cancelar">Cancelar</button>
-                    </a>
+                    
                     <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation" type="submit">Guardar y añadir producto</button>
+                </form>
+                <a href="{% url 'panel_usuario' %}" >
+                    <button class="bg-[#4a4a4a] text-white py-2 px-4 rounded-full hover-animation" id="btn_cancelar">Cancelar</button>
+                </a>
                 </div>
                 <input type="hidden" name="roller_id" id="roller_id" value="">
-            </form>
         </div>
         <div class="text-center mt-6 mb-5"> 
             <p>Cantidad de items: {{num_items}}
@@ -171,11 +172,7 @@
                 $('#inst_cenefa').val(cenefa*nuevoValor);
             });
 
-            $('#btn_cancelar').on('click', function(event) {
-                event.preventDefault(); // Prevenir cualquier comportamiento predeterminado
-                window.location.href = "{% url 'panel_usuario' %}"; // Redirigir a la URL deseada
-            });
-
+           
 
             $('#add_producto').on('submit', function(event) {
                 // Evita que el formulario se envíe por defecto
@@ -211,9 +208,10 @@
                     select1.focus();
                     return false; // Detiene la ejecución si el campo no es válido
                 }
-                if (select2.val() == "0") {
+                //alert(select2.val())
+                if (select2.val() == "0" || select2.val() =="") {
                     isValid = false;
-                    alert('Por favor, seleccione el diamtro.');
+                    alert('Por favor, seleccione el diametro.');
                     select2.focus();
                     return false; // Detiene la ejecución si el campo no es válido
                 }
