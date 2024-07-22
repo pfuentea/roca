@@ -22,10 +22,19 @@
         .d-none{
             display: none;
         }
+        .power{
+            font-size: 0.7rem;
+        }
+        .logo{
+            width: 100px;
+            height: auto;
+        }
     </style>
 </head>
 <body class="bg-[#D7B391] flex items-center justify-center min-h-screen">
+    {% load static %}
     <div class="bg-[#D7B391] w-[400px] p-6 rounded-lg">
+        
         <h1 class="text-center text-xl font-bold text-[#5a4e3c]">Cotización N:<br>S-{{cotizacion_id}}</h1>
         <div class="bg-[#D7B391] p-4 mt-4 rounded-lg">
             {% for linea in detalles %}
@@ -53,13 +62,21 @@
                 <span class="font-bold text-[#5a4e3c]">U$D {{linea.total}}</span>
             </div>
             <div class="text-[#5a4e3c]">
-                <p>Cenefa:  {% if linea.cenefa.nombre  %}
+                {% if linea.cenefa.nombre  %}
+                <p>Cenefa:  
                     {{linea.cenefa.nombre}}
-                     {% else %}N/A {% endif %}</p>
-                <p>Gateway:  {% if linea.gateway.nombre  %}
-                    {{linea.gateway.nombre}}{% else %}N/A {% endif %}</p>
-                <p>Motor eléct: {% if linea.motor.nombre  %}
-                    {{linea.motor.nombre}} {% else %}N/A{% endif %} </p>
+                </p>
+                {% endif %}
+                {% if linea.gateway.nombre  %}
+                <p>Gateway:  
+                    {{linea.gateway.nombre}}
+                </p>
+                {% endif %}
+                {% if linea.motor.nombre  %}
+                <p>Motor eléct: 
+                    {{linea.motor.nombre}}  
+                </p>
+                {% endif %}
                 <p>Instalación: Roller {% if linea.cenefa.nombre  %} - Cenefa {% endif %} 
                     {% if linea.motor.nombre  %} - Motor {% endif %}
                 </p>
@@ -184,12 +201,15 @@
             </a>
             
             <button class="bg-[#5a4e3c] text-white py-2 px-4 rounded-lg hover:bg-[#3e3a32] transition duration-300" id="exportar_pdf">Exportar PDF</button>
+            
         </div>
         <div class="text-center mt-6 mb-5">
             <a href="/logout">Cerrar Sesión</a>
         </div>
+        <div class="text-center power d-none">Powered by Peppermint</div>
     </div>
 
+    <a id="download_link" style="display:none;" href="{% url 'generate_pdf' resumen.id %}" target="_blank"></a>
     <script>
         $(document).ready(function() {
             var oTblReport = $('#cotizacion')
@@ -209,7 +229,8 @@
         $('#cotizacion_filter').addClass('d-none');
         $('#table_content').addClass('d-none');
         $('#exportar_pdf').on('click',function(){
-            $('.buttons-pdf').click();
+            //$('.buttons-pdf').click();
+            $('#download_link')[0].click();
         })
         
     });

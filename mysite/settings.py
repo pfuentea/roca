@@ -26,8 +26,8 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 #SECRET_KEY = 'django-insecure-^=6-_k)oh!n9-fpcd1qd0rf(!8y2!!8cc*so1if(!*ydv@*_dc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = True
+#DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ['DJANGO_ALLOWED_HOSTS','127.0.0.1','localhost','deslizza-app-2ezuf.ondigitalocean.app','deslizza-app-2nysq.ondigitalocean.app','simulador.deslizza.site']
 
@@ -135,7 +135,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "roca_app/static"),)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "roca_app/static"),
+]
+MEDIA_URL  = '/media/'
+MEDIA_ROOT  = os.path.join(BASE_DIR, "media")
+
 
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'

@@ -7,12 +7,35 @@
         body {
             font-family: 'Roboto', sans-serif;
         }
+        .power{
+            font-size: 0.8rem;
+            color:#5E604B;
+            margin-top: 50px;
+        }
+        .logo{
+            width: 10%;
+            height: auto;
+            
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;     
+            margin-top: 20%;   
+            margin-bottom: 50px; 
+        }
     </style>
 </head>
-<body class="bg-[#D7B391] flex items-center justify-center min-h-screen">
-    <div class="text-center">
-        {% load static %}
-        
+{% load static %}
+<body class="bg-[#D7B391]  ">
+
+    <div class="container image-container  ">
+        <img src="{% static '/images/isotipo.png' %}" alt="" class="logo">
+    </div>
+<div class="container flex items-center justify-center ">
+    
+    <div class="text-center ">
+    
         <h1 class="text-3xl font-bold text-[#5a5a3f] mb-6">Simulador de Precios</h1>
         <h2 class="text-xl font-medium text-[#5a5a3f] mb-6">Iniciar Sesión</h2>
         <form class="space-y-4" method="post" action="/login/">
@@ -29,6 +52,7 @@
                 <button type="submit" class="w-full py-2 px-4 bg-[#5a5a3f] text-white rounded-md">Ingresar</button>
             </div>
         </form>
+        <div class="text-center power">Powered by Peppermint</div>
         {% if messages %}
             <div class="mt-3">
                 {% for message in messages %}
@@ -37,5 +61,8 @@
             </div>
         {% endif %}
     </div>
+</div>
+    
+    
 </body>
 </html>

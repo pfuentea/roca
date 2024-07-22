@@ -1,0 +1,19 @@
+body{
+    background-color: #D7B391 ;
+}
+.bg-main
+{
+    background-color: #D7B391 ;
+}
+
+.btn-nav{
+    background-color: #5E604B;
+    color:#fff;
+    border-radius: 25px;
+    width:150px;
+    font-weight: bolder;
+}
+
+.form-text.text-muted {
+    display: none;
+}

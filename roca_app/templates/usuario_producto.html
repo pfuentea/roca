@@ -23,6 +23,9 @@
         .subindice{
             font-size: 0.6em;
         }
+        .power{
+            font-size: 0.7rem;
+        }
     </style>
 </head>
 <body class="bg-[#D7B391] flex items-center justify-center min-h-screen">
@@ -46,12 +49,6 @@
                     </select>
                 </div>
 
-                <div class="mb-4">
-                    <label class="block text-[#4a4a4a] mb-2">Q (diámetro)</label>
-                    <select class="w-full p-2 border border-gray-300 rounded" id="diametro_id" name="diametro_id">
-                        <option value="0">Seleccionar</option>
-                    </select>
-                </div>
                 <div class="mb-4 flex space-x-2">
                     <div class="w-1/2">
                         <label class="block text-[#4a4a4a] mb-2">Alto mm <span id="max_alto" class="subindice"></span> </label>
@@ -61,6 +58,12 @@
                         <label class="block text-[#4a4a4a] mb-2">Ancho mm <span id="max_ancho" class="subindice"></span></label>
                         <input type="text" class="w-full p-2 border border-gray-300 rounded" id="ancho" name="ancho">
                     </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-[#4a4a4a] mb-2">Q (diámetro)</label>
+                    <select class="w-full p-2 border border-gray-300 rounded" id="diametro_id" name="diametro_id">
+                        <option value="0">Seleccionar</option>
+                    </select>
                 </div>
                 <div class="mb-4">
                     <label class="block text-[#4a4a4a] mb-2">Motor eléct</label>
@@ -141,6 +144,7 @@
         <div class="text-center mt-6 mb-5">
             <a href="/logout">Cerrar Sesión</a>
         </div>
+        <div class="text-center power d-none">Powered by Peppermint</div>
     </div>
     <script>
         $(document).ready(function() {

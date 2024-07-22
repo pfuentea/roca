@@ -29,4 +29,5 @@ urlpatterns = [
     path('get_diametros/', views.get_diametros, name='get_diametros'),
     path('get_roller_id/', views.get_roller_id, name='get_roller_id'),
     path('get_max_dimensions/', views.get_max_dimensions, name='get_max_dimensions'),
+    path('generate-pdf/<int:resumen_id>', views.render_pdf_view, name='generate_pdf'),
 ]
