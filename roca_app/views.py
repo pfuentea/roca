@@ -229,7 +229,7 @@ def cotizacion_export(request,resumen_id):
         item.save()
         total_resumen+=total_item
 
-    resumen.total=total_resumen
+    resumen.total=round(float(total_resumen),2)
     cotizacion_id=str(resumen.id).zfill(4)
     resumen.cotizacion_id=cotizacion_id
     resumen.save()
