@@ -76,8 +76,10 @@
                 <p>Instalación: Roller {% if linea.cenefa.nombre  %} - Cenefa {% endif %} 
                     {% if linea.motor.nombre  %} - Motor {% endif %}
                 </p>
-                <p>C. Remoto: {% if linea.control.nombre  %}
-                    {{linea.control.nombre}} {% else %}N/A{% endif %}</p>
+                {% if linea.control.nombre  %}
+                <p>C. Remoto: 
+                    {{linea.control.nombre}} </p>
+                    {% endif %}
             </div>
             {% endfor %}
         </ol>

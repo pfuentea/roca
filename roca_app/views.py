@@ -223,7 +223,7 @@ def cotizacion_export(request,resumen_id):
         print(f"i-mot:{item.costo_instalacion_motor}")
         print(f"INST:{precio_instalacion}")
         total_item=(precio_motor*cantidad)+(precio_cenefa*cantidad)+(precio_control*cantidad)+(precio_gateway*cantidad)+precio_instalacion+(precio_roller*cantidad)
-    
+        total_item=round(float(total_item),2)
         print(f"total item:{total_item}")
         item.total=total_item
         item.save()
